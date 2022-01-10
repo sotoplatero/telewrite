@@ -1,33 +1,20 @@
-import sveltePreprocess from 'svelte-preprocess';
-import node from '@sveltejs/adapter-node';
-// import pkg from './package.json';
-
+import adapter from '@sveltejs/adapter-auto';
+import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
-export default {
+const config = {
 	// Consult https://github.com/sveltejs/svelte-preprocess
 	// for more information about preprocessors
-	preprocess: [
-		sveltePreprocess({
-			defaults: {
-				style: 'postcss'
-			},
-			postcss: true
-		})
-	],
+    preprocess: [preprocess({
+        postcss: true
+    })],
+
 	kit: {
-		// By default, `npm run build` will create a standard Node app.
-		// You can create optimized builds for different platforms by
-		// specifying a different adapter
-		adapter: node(),
+		adapter: adapter(),
 
 		// hydrate the <div id="svelte"> element in src/app.html
-		target: '#svelte',
-
-		// vite: {
-		// 	ssr: {
-		// 		noExternal: Object.keys(pkg.dependencies || {})
-		// 	}
-		// }
+		target: '#svelte'
 	}
 };
+
+export default config;

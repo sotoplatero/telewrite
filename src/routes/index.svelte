@@ -60,6 +60,6 @@
 
 <style lang="postcss">
     .popover__menu {
-        @apply bg-white shadow-md rounded-md p-2 w-32
+        @apply bg-white shadow-md rounded-md p-2 w-32;
     }
 </style>

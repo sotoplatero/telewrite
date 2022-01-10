@@ -4,7 +4,7 @@ import { supabaseClient } from '$lib/supabase';
 
 /**
  * @type {import('@sveltejs/kit').RequestHandler}
- */
+*/
 export async function post(req: Request /*, res: Response (read the notes below) */) {
     // Unlike, Next.js API handlers you don't get the response object here. As a result, you cannot invoke the below method to set cookies on the responses.
     // await supabaseClient.auth.api.setAuthCookie(req, res);

@@ -1,7 +1,6 @@
 export type ProfileAttrs = {
-    username?: string,
-    // bio?: string,
-    website?: string,
-    // twitter_handle?: string
+    slug?: string,
+    bio?: string,
     avatar_url?:string,
+    og_url?:string,
 }

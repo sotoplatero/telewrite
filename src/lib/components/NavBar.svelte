@@ -7,12 +7,12 @@
     <ul class="list-none h-full flex items-center justify-end gap-3">
         {#if $user}
             <li class="nav__item">
-                <a rel="prefetch" href="/settings" class:active={$page.path === '/settings'}>
+                <a rel="prefetch" href="/settings" class:active={$page.url.pathname === '/settings'}>
 						<i class="ion-gear-a" />
 				</a>
             </li>
             <li class="nav__item">
-                <a rel="prefetch" href="/profile/@me">
+                <a rel="prefetch" href="/profile">
                     {$user.email}
                 </a>
             </li>

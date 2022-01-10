@@ -6,11 +6,12 @@ import { API_AUTH, RESP_USER_GUEST} from '$lib/constants'
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ request, resolve }: { request: Request, resolve: (request: Request) => Response | Promise<Response> }) {
     // populate the `user` object for all the calls
+    console.log(request)
     request.locals.user = await (await auth.api.getUserByCookie(expressifyReq(request))).user || RESP_USER_GUEST // Converts request to have `req.headers.cookie` on `req.cookies, as `getUserByCookie` expects parsed cookies on `req.cookies`
     // prepare response
 	let response = await resolve(request);
     // Set/Reset authentication cookies for Supabase, when user signs in or signs out
-    if (request.method === 'POST' && request.path === API_AUTH) {
+    if (request.method === 'POST' && request.url.pathname === API_AUTH) {
         auth.api.setAuthCookie(request, expressifyResp(response)) // Converts `response` to express compatible format, which Supabase expects for setting headers
         response = deExpressifyResp(response) // Converts response back to its original format
     }
