@@ -77,18 +77,18 @@
 </div>
 <!-- Sign Up form -->
 <form class="w-full sm:w-1/2 xl:w-5/12" on:submit|preventDefault={signUpOrSignIn} >
-    <div class="border-teal p-8 border-t-12 bg-white mb-6 rounded-lg shadow-lg">
+    <div class="border-teal p-8 border-t-12 bg-white mb-6 rounded-lg border">
 <!--     <button type="button" class="flex-1 bg-gray-200 text-green-700 py-3 rounded w-full text-center shadow" on:click|preventDefault={() => handleProviderSignIn('github')}>
         <GithubIcon size="1x" class="inline-block "/> {isSignIn ? 'Log In' : 'Sign Up' } with <strong>Github</strong>
     </button> -->
-    <hr class="my-4"/>
+    <!-- <hr class="my-4"/> -->
     <div class="mb-4">
         <label for="email" class="block font-semibold text-gray-800 mb-2 text-left">Email</label>
         <input
         id="email"
         name="email"
         type="email"
-        class="h-12 px-4 py-2 bg-white rounded shadow-inner border-gray-300 w-full border  hover:border-gray-400"
+        class="h-12 px-4 py-2 bg-white rounded border-gray-300 w-full border  hover:border-gray-400"
         placeholder="Your Email"
         required
         bind:value={email}
@@ -101,7 +101,7 @@
         id="password"
         name="password"
         type="password"
-        class="h-12 px-4 py-2 bg-white rounded shadow-inner border-gray-300 w-full border hover:border-gray-400"
+        class="h-12 px-4 py-2 bg-white rounded border-gray-300 w-full border hover:border-gray-400"
         placeholder="Your password. Leave empty for password-less login"
         bind:value={password}
         />

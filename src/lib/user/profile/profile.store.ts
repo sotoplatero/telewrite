@@ -3,7 +3,9 @@ import type{ ProfileAttrs } from './profile.type'
 
 
 export const profile = writable<ProfileAttrs>({
-    username: '',
-    website: '',
+    title: '',
+    bio: '',
+    slug: '',
+    og_url: '',
     avatar_url: ''
 });

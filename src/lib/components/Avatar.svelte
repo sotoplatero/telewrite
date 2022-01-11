@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { fromBucket, from } from '$lib/supabase'
+    import { fromBucket } from '$lib/supabase'
     export let src = `https://avatars.dicebear.com/api/adventurer/default.svg`
     export let alt = 'Avatar'
 
     let loading = false
-
+    $: console.log(src)
     const uploadAvatar = async (file: File) => {
         const fileExt = file.name.split('.').pop()
         const fileName = `${Date.now()}.${fileExt}`
@@ -24,7 +24,6 @@
     }
 
     async function updateAvatar(event: any) {
-        console.log(event)
         const { target } = event
         try {
             if (!target!.files || target.files.length == 0) {
