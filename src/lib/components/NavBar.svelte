@@ -12,8 +12,8 @@
 				</a>
             </li>
             <li class="nav__item">
-                <a rel="prefetch" href="/profile">
-                    {$user.email}
+                <a href="/profile">
+                    <img class="w-7 h-7 rounded-full" src="https://unavatar.io/{$user.email}" alt="avatar">
                 </a>
             </li>
             <button class="" on:click={() => signOut()}>Sign Out</button>
