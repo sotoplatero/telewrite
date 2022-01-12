@@ -11,11 +11,11 @@
 <header class="w-full">
     <NavBar />
 
-    {#if isNavOpened}
+<!--     {#if isNavOpened}
         <Navigation {toggleNav} />
     {/if}
     <button on:click={toggleNav}>
         Menu
-    </button>
+    </button> -->
     <slot/>
 </header>

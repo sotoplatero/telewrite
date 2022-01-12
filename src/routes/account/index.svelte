@@ -1,0 +1,1 @@
+<button class="" on:click={() => signOut()}>Sign Out</button>
