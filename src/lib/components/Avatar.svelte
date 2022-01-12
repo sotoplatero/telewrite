@@ -1,6 +1,6 @@
 <script lang="ts">
     import { fromBucket } from '$lib/supabase'
-    export let src = `https://avatars.dicebear.com/api/adventurer/default.svg`
+    export let src = `https://avatars.dicebear.com/api/adventurer-neutral/default.svg`
     export let alt = 'Avatar'
 
     let loading = false
