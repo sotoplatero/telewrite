@@ -2,48 +2,31 @@
     import {from} from '$lib/supabase'
     import { API_AUTH, ROUTE_HOME } from '$lib/constants'
 
-    function response(user) {
-        if (user && !user.guest) {
-            return {
-                props: {
-                    user
-                }
-            };
-        } else {
-            return {
-                redirect:  ROUTE_HOME,
-                status: 302
-            }
-        }
-    }
-
     export async function load({ fetch, session }) {
-        // Approach #1 - Call the session getter API
-		// const res = await fetch(API_AUTH);
-		// if (res.ok) {
-  //           const { user } = await res.json();
-  //           console.log(user)
-  //           return response(user)
-  //       } else {
-  //           return {
-  //               status: res.status,
-  //               error: new Error(`Could not load ${API_AUTH}`)
-  //           };
-  //       }
+        const res = await fetch(API_AUTH);
+        if (!res.ok) return {
+            status: res.status,
+            error: new Error(`Could not load ${API_AUTH}`)
+        };            
 
-        // Approach #2 - Use the session parameter (refer hooks/index.ts to see how it got populated)
-        const { user } = session
-        console.log(user)
+        const { user } = await res.json(); 
+        // const { user } = session
         if (user?.guest) return {
             redirect:  ROUTE_HOME,
             status: 302
         }
 
-        const { data: profile } = from('profiles').select('*').single() 
-        // if (!profile) return {
-        //     redirect:  '/profile/create',
-        //     status: 302
-        // }
+        let { data: profile, error } = await from('profiles')
+            .select('*, links(*)')
+            .eq('user_id',user.id)
+            .single()
+
+        profile = profile || { 
+            title: '',
+            bio: '',
+            user_id: user.id,
+            avatar_url: ''
+        }
 
         return {
             props: {
@@ -55,105 +38,81 @@
 
 <script lang="ts">
     import { onMount } from 'svelte'
-    // import { ChromeIcon } from 'svelte-feather-icons'
     import type{ ProfileAttrs } from '$lib/user'
-    // import { signOut, getCurrUserProfile, updCurrUserProfile, updCurrUserAvatar, getAvatar, profile } from '$lib/user'
     import { handleAlert } from '$lib/alert'
     import Seo from '$lib/components/SEO.svelte'
-    // import Modal from '$lib/components/Modal.svelte'
     import Avatar from '$lib/components/Avatar.svelte'
 
-    // export let profile 
-    // Approach #3 (non-effective): Enable when using client-side user session. If you're purely using the client-side supabase-maintained session comment out the approach #1. There would be a flash of unstyled content tho
-    // import { browser } from '$app/env';
-    // import { user } from '$lib/user'
-    // if(browser && !$user) goto('/')
-
+    export let profile
+    export let user
     let loading = false
-    export let profile: ProfileAttrs = {
-        title: '',
-        bio: '',
-    }
+    let link = ''
+    let links = []
 
-    // async function getProfile() {
-    //     try {
-    //         loading = true
-    //         // let { data: profile, error } = await getCurrUserProfile()
-    //         // let { data: profile, error } = await from('profiles').select('*').single()
-    //         // if (error) {
-    //         //     handleAlert({ type: 'default', text: 'First login? You wanna update your profile details? 🙂' })
-    //         // }
-
-    //         // avatar_url = await getAvatar(avatar_url)
-    //         profileState = profile
-    //         profile.set({ ...profileState })
-
-    //     } catch (error) {
-    //         if(error instanceof TypeError) {
-    //             // handleAlert({ type: 'default', text: 'First login? You wanna update your profile details? 🙂' })
-    //         } else if(error.message === 'The resource was not found') {
-    //             handleAlert({ type: 'default', text: 'You know? You can click on the randomly generated avatar to update your profile picture.' })
-    //         } else {
-    //             handleAlert({ type: 'error', text: error.message })
-    //         }
-    //     } finally {
-    //         loading = false
-    //     }
-    // }
+    $: console.log(profile)
 
     async function updProfile() {
+        loading = true
         try {
-            loading = true
-
+            // await from('profiles').select('slug').like('slug',profile.title)
             let { 
                 data: profileDB, 
                 error: updateError 
-            } = await from('profiles').insert({
-                title: profile.title,
-                slug: profile.title,
-            })
-            if (updateError) {
-                throw updateError
-            }
+            } = await from('profiles').insert(profile)
+
+            if (updateError) throw updateError
             profile = profileDB
             // profile.update((profile) => ({ ...profile }))
 
         } catch (error) {
             handleAlert({ type: 'error', text: error.message })
         } finally {
-            // isModalOpened = false
             loading = false
         }
     }
 
-    // onMount(getProfile)
-
-
-    export let user /* When using approach #3 (client-side user session) comment this out and replace `user` with `(dollar)user` in the template */
+    async function addLink(){
+        const path = link.match(/telegra.ph\/(.+)/)[1]
+        const res = await fetch(`https://api.telegra.ph/getPage/${path}`,{mode:'cors'})
+        const { result: data } = await res.json()
+        if (data) {
+            const { data: [linkdDB], error } = await from('links').upsert({
+                link, profile_id: profile.id, data
+            },{ onConflict: 'link, profile_id' })
+            profile = {...profile, links: [ ...profile.links, linkdDB]}
+            console.log(profile)
+        }
+        link = ''
+    }
+    async function removeLink(id){
+        console.log(id)
+        const { data, error } = await from('links').delete().match({ id })
+        console.log(data)
+        if (!error) {
+            const links = profile.links.filter(el=>el.id!==id)
+            profile = {...profile, links}
+        }
+    }
 </script>
 <Seo title="Profile"/>
 
 <div class="flex flex-col justify-center items-center relative">
     <div class="p-2 flex flex-col place-items-center">
         <div class="mt-2">
-            <Avatar bind:src={profile.avatar_url} alt={profile.title}/>
+            <Avatar bind:src={profile.avatar_url} email={user.email}/>
         </div>
     </div>
 </div>
 
-<!-- {#if isModalOpened}
-	<Modal {toggleModal}> -->
 <div class="max-w-sm mx-auto">
     
-        <!-- <h2 class="text-3xl my-4">Update Profile</h2> -->
-        <!-- <hr class="my-4"/> -->
         <div class="">
             <div class="mb-4">
-                <label for="title" class="label">Title</label>
+                <!-- <label for="title" class="label">Title</label> -->
                 <input
                 name="title"
                 type="text"
-                class="input input-bordered input-lg w-full"
+                class="w-full text-2xl text-center font-semibold"
                 placeholder="Title"
                 required
                 bind:value={profile.title}
@@ -171,7 +130,47 @@
                 />
             </div> -->
         </div>
-		<button class="btn btn-lg btn-primary" on:click={updProfile}>Update Profile</button>
+        <div class="text-center">
+    		<button class="btn btn-outline" on:click={updProfile}>
+                Save
+            </button>
+        </div>
+
 </div>
-<!-- 	</Modal>
-{/if} -->
+{#if profile.id}
+<div class="mt-10 max-w-screen-sm mx-auto">
+    <input
+        name="title"
+        type="text"
+        class="w-full text-xl text-center pb-2 border-b"
+        placeholder="Type the blog post URL"
+        required
+        bind:value={link}
+        on:change={addLink}
+    />            
+</div>
+
+<div class="mt-10 max-w-screen-sm mx-auto space-y-10">
+    {#each profile.links as {id, data:link}, index}
+    <div>
+        <a href="{link.url}" class="flex">
+            <div class="w-1/3 flex-none mr-6">
+                <figure class="aspect-w-4 aspect-h-3">
+                    <img alet="{link.title}" src="{link.image_url}" class="w-full h-full object-center object-cover ">
+                </figure>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold">{link.title}</h3>
+                <p class="text-lg mt-2 line-clamp-3 text-gray-600">{link.description}</p>
+            </div>
+        </a>
+        <div>
+            <button on:click={removeLink(id)}>X</button>
+        </div>
+    </div>
+            
+    {/each}
+    
+</div>
+{/if}
+

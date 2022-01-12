@@ -12,7 +12,7 @@
 
 <script lang="ts">
     import Seo from '$lib/components/SEO.svelte'
-    import { ArchiveIcon } from 'svelte-feather-icons'
+    // import { ArchiveIcon } from 'svelte-feather-icons'
     import DefaultModal from '$lib/components/modal/presets/DefaultModal.svelte'
     import Sidepanel from '$lib/components/modal/presets/Sidepanel.svelte'
     import { openModal } from '$lib/components/modal/modal.store'
@@ -35,7 +35,7 @@
     <div class="w-full text-center mb-4 flex flex-col place-items-center">
         <div class="banner flex flex-col place-items-center mt-32 mb-2">
             <div>
-                <ArchiveIcon size="4x" class="w-12 h-12 text-gray-600" />
+                <!-- <ArchiveIcon size="4x" class="w-12 h-12 text-gray-600" /> -->
             </div>
             <h3 class="text-6xl text-red-500"><strong>Svelte</strong></h3>
             <h3 class="px-3 py-1 text-2xl bg-gray-400 text-white uppercase">Starter Kit</h3>

@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { XIcon } from 'svelte-feather-icons'
     import { fly } from 'svelte/transition'
     import { closeModal } from './modal.store'
     import { modalEvtBindings } from './modal.action'
@@ -14,7 +13,7 @@
     <div role="alertdialog" aria-modal="true" aria-labelledby={`modal__content-title-${index}`} aria-describedby={`modal__content-body-${index}`} class="modal" use:modalEvtBindings on:esc={closeModal} tabindex={0} transition:fly={transitionConfig}>
       <div class="modal__content" class:modal__content--default={!isSidePanel} class:modal__content--sidepanel={isSidePanel}>
         <button class="modal__action-close" class:modal__action-close--default={!isSidePanel} class:mmodal__action-close--sidepanel={isSidePanel} on:click={closeModal}>
-            <XIcon class="w-4 inline-block"/>
+            X
         </button>
         <slot/>
         <div class="modal_actions">

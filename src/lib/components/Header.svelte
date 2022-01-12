@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { MenuIcon } from 'svelte-feather-icons'
     import Navigation from './Navigation.svelte'
     import NavBar from './NavBar.svelte'
     let isNavOpened = false
@@ -15,6 +14,8 @@
     {#if isNavOpened}
         <Navigation {toggleNav} />
     {/if}
-    <!-- <button on:click={toggleNav}><MenuIcon class="w-5 inline-block" /> Menu</button> -->
+    <button on:click={toggleNav}>
+        Menu
+    </button>
     <slot/>
 </header>

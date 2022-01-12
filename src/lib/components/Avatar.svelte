@@ -1,10 +1,12 @@
 <script lang="ts">
     import { fromBucket } from '$lib/supabase'
-    export let src = `https://avatars.dicebear.com/api/adventurer-neutral/default.svg`
-    export let alt = 'Avatar'
+    export let src
+    export let email
 
     let loading = false
-    $: console.log(src)
+    // $: src = src ?? `https://avatars.dicebear.com/api/croodles-neutral/default.svg?b=%23f0f0f0`
+    $: src = src ?? `https://unavatar.io/${email}`
+
     const uploadAvatar = async (file: File) => {
         const fileExt = file.name.split('.').pop()
         const fileName = `${Date.now()}.${fileExt}`
@@ -52,7 +54,7 @@
 <div class="">
     <label class="avatar" for="single">
         <div class="w-24 h-24 rounded-full">
-            <img class="" {alt} {src} />
+            <img class="" alt="Profile avatar" {src} />
         </div>
         <!-- {loading ? 'Updating..' : '(click to update)'} -->
     </label>

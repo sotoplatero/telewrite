@@ -1,6 +1,6 @@
 <script lang="ts">
     import { fly } from 'svelte/transition'
-    import { CheckCircleIcon, AlertCircleIcon, XIcon } from 'svelte-feather-icons'
+    // import { CheckCircleIcon, AlertCircleIcon, XIcon } from 'svelte-feather-icons'
     import type { Alert } from './alert.type'
     import { clearAlertTimeout } from './alert.store'
 
@@ -17,15 +17,16 @@
     >
         <div class="alert__content">
             {#if alert.type === 'success'}
-                <CheckCircleIcon class="w-6 inline-block"/>
+                <!-- <CheckCircleIcon class="w-6 inline-block"/> -->
             {:else}
-                <AlertCircleIcon class="w-6 inline-block"/>
+                <!-- <AlertCircleIcon class="w-6 inline-block"/> -->
             {/if}
             <p>
                 {@html alert.text}
             </p>
             <button class="alert__action-close" on:click={() => (isVisible = !isVisible)} on:click={() => clearTimeout(clearAlertTimeout())}>
-                <XIcon class="w-3 inline-block"/>
+                X
+                <!-- <XIcon class="w-3 inline-block"/> -->
             </button>
         </div>
     </aside>

@@ -1,6 +1,5 @@
 <script lang="ts">
     import { tick } from 'svelte'
-    import { LockIcon, GithubIcon } from 'svelte-feather-icons'
     import { auth } from '$lib/supabase'
     import { createQueryStore } from '$lib/utils/query'
     import Seo from '$lib/components/SEO.svelte'
@@ -68,7 +67,7 @@
 <!-- App logo and tagline -->
 <div class="w-full text-center mb-4 flex  flex-col place-items-center">
     <div>
-        <LockIcon size="3x" class="w-12 h-12 text-gray-600" />
+        <!-- <LockIcon size="3x" class="w-12 h-12 text-gray-600" /> -->
     </div>
     <h3 class="text-5xl text-red-500"><strong>Svelte</strong></h3>
     <h3 class="px-3 py-1 bg-gray-400 text-white uppercase mb-2">Starter Kit</h3>
